@@ -1,0 +1,38 @@
+{
+  "name": "financial-system",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "tauri": "tauri",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.9.25",
+    "@firebase/firestore": "^4.4.0",
+    "bootstrap": "^5.3.2",
+    "firebase": "^10.7.1",
+    "next": "14.0.3",
+    "react": "^18",
+    "react-bootstrap": "^2.9.1",
+    "react-dom": "^18",
+    "react-router-dom": "^6.21.0",
+    "uuid": "^9.0.1",
+    "web-vitals": "^3.5.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.6",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.7",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
