@@ -10,7 +10,7 @@ interface BudgetCardProps {
   hideButtons?: boolean;
   onAddExpenseClick: () => void;
   onViewExpensesClick: () => void;
-    date?: Date; 
+  date?: Date;
 }
 
 const BudgetCard: React.FC<BudgetCardProps> = ({
@@ -21,7 +21,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   hideButtons,
   onAddExpenseClick,
   onViewExpensesClick,
-  date, 
+  date,
 }) => {
   const classNames: string[] = [];
   if (amount > (max || 0)) {
@@ -31,7 +31,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   }
 
   return (
-    <Card>
+    <Card className={classNames.join(" ")}>
       <Card.Body>
         <Card.Title className="d-flex justify-content-between align-items-baseline fw-normal mb-3">
           <div className="me-2">{name}</div>
@@ -44,8 +44,10 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             )}
           </div>
         </Card.Title>
-        {date && ( 
-          <div className="text-muted fs-6">Last Update: {date.toLocaleDateString()}</div>
+        {date && (
+          <div className="text-muted fs-6">
+            Last Update: {new Date(date).toLocaleDateString()}
+          </div>
         )}
         {max && (
           <ProgressBar
@@ -74,7 +76,6 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
     </Card>
   );
 };
-
 
 function getProgressBarVariant(amount: number, max: number): "primary" | "warning" | "danger" {
   const ratio = amount / max;

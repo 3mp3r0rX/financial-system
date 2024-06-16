@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <>
       <Container className="mb-2 text-2xl font-bold my-4 text-sky-500">
-      <div style={{ position: "fixed", top: 5, left: 470 }}>{timeLabel}</div>
+      <div style={{ position: "fixed", top: 5, left: 400 }}>{timeLabel}</div>
       <br />
         <Stack direction="horizontal" gap={2} className="mb-4">
           <h1 className="me-auto ">Financial System</h1>
