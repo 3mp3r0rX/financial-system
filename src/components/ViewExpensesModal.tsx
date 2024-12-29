@@ -3,7 +3,6 @@ import { UNCATEGORIZED_BUDGET_ID, useBudgets } from "../contexts/BudgetsContext"
 import { currencyFormatter } from "../utils";
 import { useState, useEffect } from "react";
 
-
 interface ViewExpensesModalProps {
   budgetId: string | null;
   handleClose: () => void;
@@ -16,10 +15,16 @@ export default function ViewExpensesModal({ budgetId, handleClose }: ViewExpense
     ? { name: "Uncategorized", id: UNCATEGORIZED_BUDGET_ID }
     : budgets.find(b => b.id === budgetId);
 
-  const [timestamps, setTimestamps] = useState<{ [key: string]: string }>(() => {
-    const savedTimestamps = localStorage.getItem('timestamps');
-    return savedTimestamps ? JSON.parse(savedTimestamps) : {};
-  });
+  const [timestamps, setTimestamps] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedTimestamps = localStorage.getItem('timestamps');
+      if (savedTimestamps) {
+        setTimestamps(JSON.parse(savedTimestamps));
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const initialTimestamps = expenses.reduce((acc, expense) => {
@@ -32,7 +37,9 @@ export default function ViewExpensesModal({ budgetId, handleClose }: ViewExpense
     if (Object.keys(initialTimestamps).length > 0) {
       const newTimestamps = { ...timestamps, ...initialTimestamps };
       setTimestamps(newTimestamps);
-      localStorage.setItem('timestamps', JSON.stringify(newTimestamps));
+      if (typeof window !== "undefined") {
+        localStorage.setItem('timestamps', JSON.stringify(newTimestamps));
+      }
     }
   }, [expenses, timestamps]);
 
@@ -41,7 +48,9 @@ export default function ViewExpensesModal({ budgetId, handleClose }: ViewExpense
     const newTimestamps = { ...timestamps };
     delete newTimestamps[expense.id];
     setTimestamps(newTimestamps);
-    localStorage.setItem('timestamps', JSON.stringify(newTimestamps));
+    if (typeof window !== "undefined") {
+      localStorage.setItem('timestamps', JSON.stringify(newTimestamps));
+    }
   };
 
   const handleDeleteBudget = () => {

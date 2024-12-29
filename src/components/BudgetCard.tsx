@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Card, ProgressBar, Stack } from "react-bootstrap";
-import { currencyFormatter } from "../utils";
 
 interface BudgetCardProps {
   name: string;
@@ -23,6 +22,9 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   onViewExpensesClick,
   date,
 }) => {
+  const remaining = max ? max - amount : 0;
+  const progressPercentage = max ? (amount / max) * 100 : 0;
+
   const classNames: string[] = [];
   if (amount > (max || 0)) {
     classNames.push("bg-danger", "bg-opacity-10");
@@ -35,29 +37,45 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
       <Card.Body>
         <Card.Title className="d-flex justify-content-between align-items-baseline fw-normal mb-3">
           <div className="me-2">{name}</div>
-          <div className="d-flex align-items-baseline">
-            {currencyFormatter.format(amount)}
+          <div className="d-flex flex-column align-items-end">
+            <div className="d-flex align-items-baseline">
+              ${amount.toFixed(2)}
+              {max && (
+                <span className="text-muted fs-6 ms-1">
+                  / ${max.toFixed(2)}
+                </span>
+              )}
+            </div>
             {max && (
-              <span className="text-muted fs-6 ms-1">
-                / {currencyFormatter.format(max)}
-              </span>
+              <div className="text-muted fs-6">
+                Remaining: ${remaining.toFixed(2)}
+              </div>
             )}
           </div>
         </Card.Title>
+        
         {date && (
-          <div className="text-muted fs-6">
+          <div className="text-muted fs-6 mb-2">
             Last Update: {new Date(date).toLocaleDateString()}
           </div>
         )}
+
         {max && (
-          <ProgressBar
-            className="rounded-pill"
-            variant={getProgressBarVariant(amount, max)}
-            min={0}
-            max={max}
-            now={amount}
-          />
+          <div>
+            <ProgressBar
+              className="rounded-pill mb-2"
+              variant={getProgressBarVariant(amount, max)}
+              min={0}
+              max={max}
+              now={amount}
+            />
+            <div className="d-flex justify-content-between text-muted fs-6">
+              <span>Progress: {progressPercentage.toFixed(1)}%</span>
+              <span>Paid: ${amount.toFixed(2)}</span>
+            </div>
+          </div>
         )}
+
         {!hideButtons && (
           <Stack direction="horizontal" gap={2} className="mt-4">
             <Button
