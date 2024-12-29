@@ -1,5 +1,4 @@
 import { useBudgets } from "../contexts/BudgetsContext";
-import BudgetCard from "./BudgetCard";
 
 interface Expense {
   amount: number;

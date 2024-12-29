@@ -1,5 +1,5 @@
 import { UNCATEGORIZED_BUDGET_ID, useBudgets } from "../contexts/BudgetsContext";
-import BudgetCard from "./BudgetCard";
+import BudgetCard from "./BudgetCard/BudgetCard";
 
 
 

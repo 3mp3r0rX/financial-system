@@ -1,17 +1,22 @@
 "use client"
 
 import { Button, Stack } from "react-bootstrap";
+import { 
+  PlusCircle, 
+  Wallet, 
+  CreditCard, 
+  Clock, 
+  ChartPie 
+} from "lucide-react";
 import Container from "react-bootstrap/Container";
-import AddBudgetModal from "../components/AddBudgetModal";
-import AddExpenseModal from "../components/AddExpenseModal";
-import ViewExpensesModal from "../components/ViewExpensesModal";
-import BudgetCard from "../components/BudgetCard";
+import AddBudgetModal from "../components/AddBudgetModal/AddBudgetModal";
+import AddExpenseModal from "../components/AddExpenseModal/AddExpenseModal";
+import ViewExpensesModal from "../components/ViewExpensesModal/ViewExpensesModal";
+import BudgetCard from "../components/BudgetCard/BudgetCard";
 import UncategorizedBudgetCard from "../components/UncategorizedBudgetCard";
 import TotalBudgetCard from "../components/TotalBudgetCard";
 import { useEffect, useState } from "react";
 import { UNCATEGORIZED_BUDGET_ID, useBudgets } from "../contexts/BudgetsContext"
-
-
 
 export default function Home() {
   const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
@@ -21,10 +26,14 @@ export default function Home() {
   const { budgets, getBudgetExpenses } = useBudgets();
   const [timeLabel, setTimeLabel] = useState<string | undefined>();
   
-
   useEffect(() => {
     const timeIntervalId = setInterval(() => {
-      setTimeLabel(new Date().toLocaleTimeString());
+      setTimeLabel(new Date().toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }));
     }, 1000);
 
     return () => {
@@ -38,29 +47,46 @@ export default function Home() {
   }
 
   return (
-    <>
-      <Container className="mb-2 text-2xl font-bold my-4 text-sky-500">
-      <div style={{ position: "fixed", top: 5, left: 400 }}>{timeLabel}</div>
-      <br />
-        <Stack direction="horizontal" gap={2} className="mb-4">
-          <h1 className="me-auto ">Financial System</h1>
-          <Button variant="primary" onClick={() => setShowAddBudgetModal(true)}>
-            Add In Debt
+    <div className="bg-gray-50 min-h-screen">
+      <Container className="py-8 px-4">
+        {/* Header Section */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
+              <Wallet className="text-blue-500" />
+              Financial System
+            </h1>
+            <p className="text-gray-500 mt-2">Track your budgets and expenses</p>
+          </div>
+
+          {/* Time Display */}
+          <div className="flex items-center gap-2 bg-white shadow-md rounded-lg px-4 py-2">
+            <Clock className="text-blue-500" />
+            <span className="font-semibold text-gray-700">{timeLabel}</span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-4 mb-6">
+          <Button 
+            variant="primary" 
+            className="flex items-center gap-2"
+            onClick={() => setShowAddBudgetModal(true)}
+          >
+            <PlusCircle /> Add Budget
           </Button>
-          <Button
-            variant="outline-primary"
+          <Button 
+            variant="outline-primary" 
+            className="flex items-center gap-2"
             onClick={() => openAddExpenseModal("")}
           >
-            Add Payment
+            <CreditCard /> Add Payment
           </Button>
-        </Stack>
+        </div>
+
+        {/* Budget Grid */}
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1rem",
-            alignItems: "flex-start",
-          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {budgets.map((budget) => {
             const amount = getBudgetExpenses(budget.id).reduce(
@@ -81,6 +107,7 @@ export default function Home() {
               />
             );
           })}
+          
           <UncategorizedBudgetCard
             onAddExpenseClick={() => openAddExpenseModal("")}
             onViewExpensesClick={() =>
@@ -90,6 +117,8 @@ export default function Home() {
           <TotalBudgetCard />
         </div>
       </Container>
+
+      {/* Modals */}
       <AddBudgetModal
         show={showAddBudgetModal}
         handleClose={() => setShowAddBudgetModal(false)}
@@ -103,7 +132,13 @@ export default function Home() {
         budgetId={viewExpensesModalBudgetId}
         handleClose={() => setViewExpensesModalBudgetId(null)}
       />
-      <p className="text-center align-bottom">Created by Majed El-Naser</p>
-    </>
+
+      {/* Footer */}
+      <footer className="text-center py-4 bg-gray-100">
+        <p className="text-gray-600 flex items-center justify-center gap-2">
+          Created with <ChartPie className="text-blue-500" /> by Majed El-Naser
+        </p>
+      </footer>
+    </div>
   );
 }
